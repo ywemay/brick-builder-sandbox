@@ -7,9 +7,15 @@ var current_color = "Red"
 var brick_buttons = {}  # Dictionary: button -> brick_name
 var selected_button = null
 
-@onready var grid_container = $GridContainer
+var grid_container = null
 
 func _ready():
+	# Get the GridContainer
+	grid_container = get_node("GridContainer")
+	if not grid_container:
+		print("ERROR: GridContainer not found!")
+		return
+	
 	# Create initial buttons for current color
 	refresh_bricks()
 
@@ -18,6 +24,11 @@ func set_color(color: String):
 	refresh_bricks()
 
 func refresh_bricks():
+	# Check if grid_container exists
+	if not grid_container:
+		print("ERROR: grid_container is null in refresh_bricks()")
+		return
+	
 	# Clear existing buttons
 	for button in brick_buttons.keys():
 		button.queue_free()
@@ -52,8 +63,12 @@ func create_brick_button(brick_name: String, texture_path: String):
 	
 	button.pressed.connect(_on_brick_button_pressed.bind(button, brick_name))
 	
-	grid_container.add_child(button)
-	brick_buttons[button] = brick_name
+	# Check if grid_container exists before adding child
+	if grid_container:
+		grid_container.add_child(button)
+		brick_buttons[button] = brick_name
+	else:
+		print("ERROR: grid_container is null in create_brick_button()")
 	
 	# Select first brick by default
 	if brick_buttons.size() == 1:
