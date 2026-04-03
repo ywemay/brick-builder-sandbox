@@ -133,8 +133,8 @@ func start_moving_brick(brick, start_position: Vector2):
 		brick.highlight(true)
 	
 	# Store original position in case we cancel
-	if brick.has_method("get_position"):
-		brick.original_position = brick.position
+	# position is a property of Node2D, accessible directly
+	brick.original_position = brick.position
 	
 	print("Moving brick: ", brick.name)
 
@@ -176,7 +176,7 @@ func cancel_moving_brick():
 		return
 	
 	# Return to original position
-	if selected_brick.has_method("get_position") and hasattr(selected_brick, "original_position"):
+	if hasattr(selected_brick, "original_position"):
 		selected_brick.position = selected_brick.original_position
 	
 	# Remove highlight

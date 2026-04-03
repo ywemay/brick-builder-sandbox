@@ -71,8 +71,5 @@ func contains_point(point: Vector2) -> bool:
 	var brick_rect = Rect2(position - texture_size / 2, texture_size)
 	return brick_rect.has_point(point)
 
-func get_position() -> Vector2:
-	return position
-
-func set_position(new_position: Vector2):
-	position = new_position
+# Note: position is already available as a property from Node2D
+# We don't need custom getter/setter methods
