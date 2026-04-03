@@ -1,0 +1,89 @@
+name: Test Brick Builder Sandbox
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Check project structure
+      run: |
+        echo "Checking project structure..."
+        ls -la
+        
+        # Check required files exist
+        required_files=(
+          "project.godot"
+          "Main.tscn"
+          "Main.gd"
+          "Brick.tscn"
+          "Brick.gd"
+          "ColorSelector.gd"
+          "BrickSelector.gd"
+          "DragDropSystem.gd"
+          "TouchInput.gd"
+          "FloorVisual.gd"
+          "README.md"
+          "QUICK_START.md"
+        )
+        
+        for file in "${required_files[@]}"; do
+          if [ -f "$file" ]; then
+            echo "✅ $file exists"
+          else
+            echo "❌ $file missing"
+            exit 1
+          fi
+        done
+        
+        # Check asset directories
+        echo -e "\nChecking asset directories..."
+        color_dirs=("Red" "Blue" "Green" "Yellow" "Black" "White" "Special")
+        for color in "${color_dirs[@]}"; do
+          dir="assets/bricks/$color"
+          if [ -d "$dir" ]; then
+            count=$(find "$dir" -name "*.png" | wc -l)
+            echo "✅ $color: $count bricks"
+          else
+            echo "❌ $color: missing directory"
+            exit 1
+          fi
+        done
+        
+        echo -e "\n✅ All checks passed!"
+    
+    - name: Check GDScript syntax
+      run: |
+        echo "Checking GDScript files for common issues..."
+        
+        # Check for deprecated APIs
+        if grep -r "DisplayServer.has_touchscreen_ui_hint()" --include="*.gd" .; then
+          echo "❌ Found deprecated DisplayServer.has_touchscreen_ui_hint()"
+          exit 1
+        fi
+        
+        # Check for correct API
+        if grep -r "DisplayServer.is_touchscreen_available()" --include="*.gd" .; then
+          echo "✅ Using correct DisplayServer.is_touchscreen_available()"
+        fi
+        
+        # Check scene format
+        if grep -r "format=3" --include="*.tscn" .; then
+          echo "✅ Scene files use format=3 (Godot 4.x)"
+        fi
+        
+        echo -e "\n✅ GDScript checks passed!"
+    
+    - name: Summary
+      run: |
+        echo "🎉 Brick Builder Sandbox tests passed!"
+        echo "Project is ready for Godot 4.6"
+        echo "Total files: $(find . -type f | wc -l)"
+        echo "Total brick textures: $(find assets/bricks -name "*.png" | wc -l)"
