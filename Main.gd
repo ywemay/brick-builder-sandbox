@@ -1,13 +1,13 @@
 extends Node2D
 
-# UI references
-@onready var build_area = $BuildArea
-@onready var clear_button = $UI/ClearButton
-@onready var rotate_button = $UI/RotateButton
-@onready var color_selector = $UI/ColorSelector
-@onready var brick_selector = $UI/BrickSelectorPanel/BrickSelector
-@onready var drag_system = $DragDropSystem
-@onready var touch_input = $TouchInput
+# UI references - will be initialized in _ready()
+var build_area = null
+var clear_button = null
+var rotate_button = null
+var color_selector = null
+var brick_selector = null
+var drag_system = null
+var touch_input = null
 
 # Screen boundaries
 var screen_width = 1280
@@ -25,6 +25,40 @@ func _ready():
 	print("Brick Builder Sandbox - Godot 4.6 - Kid Friendly Edition")
 	print("🎮 Pick color, pick brick, drag to build!")
 	print("💥 Right-click brick to explode")
+	
+	# Debug: Print scene tree
+	print("\n=== DEBUG: Scene Tree ===")
+	print("Root: ", get_tree().root.name)
+	print("Current scene: ", get_tree().current_scene.name)
+	print("Children: ", get_children())
+	
+	# Initialize UI references
+	build_area = get_node_or_null("BuildArea")
+	clear_button = get_node_or_null("UI/ClearButton")
+	rotate_button = get_node_or_null("UI/RotateButton")
+	color_selector = get_node_or_null("UI/ColorSelector")
+	brick_selector = get_node_or_null("UI/BrickSelectorPanel/BrickSelector")
+	drag_system = get_node_or_null("DragDropSystem")
+	touch_input = get_node_or_null("TouchInput")
+	
+	# Debug: Print what was found
+	print("\n=== DEBUG: Node References ===")
+	print("build_area: ", build_area.name if build_area else "null")
+	print("clear_button: ", clear_button.name if clear_button else "null")
+	print("rotate_button: ", rotate_button.name if rotate_button else "null")
+	print("color_selector: ", color_selector.name if color_selector else "null")
+	print("brick_selector: ", brick_selector.name if brick_selector else "null")
+	print("drag_system: ", drag_system.name if drag_system else "null")
+	print("touch_input: ", touch_input.name if touch_input else "null")
+	
+	# Check if all nodes were found
+	if not brick_selector:
+		print("ERROR: brick_selector not found!")
+		# Try to find it another way
+		var ui = get_node_or_null("UI")
+		if ui:
+			print("UI found, children: ", ui.get_children())
+		return
 	
 	# Connect signals
 	clear_button.pressed.connect(_on_clear_button_pressed)

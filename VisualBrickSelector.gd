@@ -10,11 +10,39 @@ var selected_button = null
 var grid_container = null
 
 func _ready():
+	print("VisualBrickSelector._ready() called")
+	print("Node path: ", get_path())
+	print("Node name: ", name)
+	print("Parent: ", get_parent().name if get_parent() else "null")
+	print("Children: ", get_children())
+	
 	# Get the GridContainer
-	grid_container = get_node("GridContainer")
+	grid_container = get_node_or_null("GridContainer")
 	if not grid_container:
-		print("ERROR: GridContainer not found!")
-		return
+		print("ERROR: GridContainer not found using get_node('GridContainer')")
+		# Try to find any GridContainer child
+		for child in get_children():
+			print("  Child: ", child.name, " Type: ", child.get_class())
+			if child is GridContainer:
+				grid_container = child
+				print("Found GridContainer as child: ", child.name)
+				break
+	
+	if not grid_container:
+		print("FATAL ERROR: No GridContainer found!")
+		# Create one dynamically as fallback
+		grid_container = GridContainer.new()
+		grid_container.columns = 3
+		grid_container.anchor_right = 1.0
+		grid_container.anchor_bottom = 1.0
+		grid_container.offset_left = 5
+		grid_container.offset_top = 5
+		grid_container.offset_right = -5
+		grid_container.offset_bottom = -5
+		add_child(grid_container)
+		print("Created GridContainer dynamically as fallback")
+	else:
+		print("GridContainer found successfully: ", grid_container.name)
 	
 	# Create initial buttons for current color
 	refresh_bricks()
