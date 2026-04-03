@@ -1,0 +1,48 @@
+[gd_scene load_steps=7 format=3]
+
+[ext_resource type="Script" path="res://Main.gd" id="Main_script"]
+[ext_resource type="Script" path="res://FloorVisual.gd" id="Floor_script"]
+[ext_resource type="Script" path="res://ColorSelector.gd" id="Color_script"]
+[ext_resource type="Script" path="res://BrickSelector.gd" id="Brick_script"]
+[ext_resource type="Script" path="res://DragDropSystem.gd" id="Drag_script"]
+[ext_resource type="Script" path="res://TouchInput.gd" id="Touch_script"]
+
+[node name="Main" type="Node2D"]
+script = ExtResource("Main_script")
+
+[node name="BuildArea" type="Node2D" parent="."]
+
+[node name="FloorVisual" type="Node2D" parent="."]
+script = ExtResource("Floor_script")
+
+[node name="DragDropSystem" type="Node" parent="."]
+script = ExtResource("Drag_script")
+
+[node name="TouchInput" type="Node" parent="."]
+script = ExtResource("Touch_script")
+
+[node name="UI" type="CanvasLayer" parent="."]
+
+[node name="ClearButton" type="Button" parent="UI"]
+position = Vector2(50, 50)
+text = "Clear All"
+flat = false
+
+[node name="RotateButton" type="Button" parent="UI"]
+position = Vector2(150, 50)
+text = "Rotate (R)"
+flat = false
+
+[node name="Instructions" type="Label" parent="UI"]
+position = Vector2(50, 100)
+text = "Select color & brick, then click+drag to place
+Right-click or Rotate button to rotate, ESC to cancel"
+vertical_alignment = 1
+
+[node name="ColorSelector" type="HBoxContainer" parent="UI"]
+position = Vector2(50, 150)
+script = ExtResource("Color_script")
+
+[node name="BrickSelector" type="HBoxContainer" parent="UI"]
+position = Vector2(50, 200)
+script = ExtResource("Brick_script")

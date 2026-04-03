@@ -1,0 +1,34 @@
+# Godot-specific ignores
+.godot/
+*.uid
+export_presets.cfg
+export/
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Editor files
+*.import
+
+# Build files
+bin/
+obj/
+
+# Logs and databases
+*.log
+*.sql
+*.sqlite
+
+# OS generated files
+[Tt]humbs.db
+*.stackdump
+
+# Backup files
+*~
+*.bak
+*.swp
+
+# Test files
+test_*.py
+final_test.py
