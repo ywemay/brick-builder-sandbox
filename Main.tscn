@@ -1,11 +1,14 @@
-[gd_scene load_steps=7 format=3]
+[gd_scene load_steps=9 format=3]
 
 [ext_resource type="Script" path="res://Main.gd" id="Main_script"]
 [ext_resource type="Script" path="res://FloorVisual.gd" id="Floor_script"]
-[ext_resource type="Script" path="res://ColorSelector.gd" id="Color_script"]
-[ext_resource type="Script" path="res://BrickSelector.gd" id="Brick_script"]
+[ext_resource type="Script" path="res://VisualColorSelector.gd" id="Color_script"]
+[ext_resource type="Script" path="res://VisualBrickSelector.gd" id="Brick_script"]
 [ext_resource type="Script" path="res://DragDropSystem.gd" id="Drag_script"]
 [ext_resource type="Script" path="res://TouchInput.gd" id="Touch_script"]
+[ext_resource type="Texture2D" uid="uid://bq5q8l5o5o5i5" path="res://assets/bricks/Red/brick_low_1.png" id="1_4q6i8"]
+[ext_resource type="Texture2D" uid="uid://bq5q8l5o5o5i6" path="res://assets/bricks/Red/brick_medium_1.png" id="2_4q6i8"]
+[ext_resource type="Texture2D" uid="uid://bq5q8l5o5o5i7" path="res://assets/bricks/Red/brick_high_1.png" id="3_4q6i8"]
 
 [node name="Main" type="Node2D"]
 script = ExtResource("Main_script")
@@ -25,24 +28,46 @@ script = ExtResource("Touch_script")
 
 [node name="ClearButton" type="Button" parent="UI"]
 position = Vector2(50, 50)
-text = "Clear All"
+custom_minimum_size = Vector2(64, 64)
+text = "🗑️"
 flat = false
 
 [node name="RotateButton" type="Button" parent="UI"]
-position = Vector2(150, 50)
-text = "Rotate (R)"
+position = Vector2(120, 50)
+custom_minimum_size = Vector2(64, 64)
+text = "↻"
 flat = false
 
 [node name="Instructions" type="Label" parent="UI"]
-position = Vector2(50, 100)
-text = "Select color & brick, then click+drag to place
-Right-click or Rotate button to rotate, ESC to cancel"
+position = Vector2(50, 120)
+text = "🎮 Pick color, pick brick, drag to build!
+💥 Right-click brick to explode
+↻ Rotate button or R key
+🗑️ Clear all"
 vertical_alignment = 1
 
 [node name="ColorSelector" type="HBoxContainer" parent="UI"]
-position = Vector2(50, 150)
+position = Vector2(50, 160)
 script = ExtResource("Color_script")
 
-[node name="BrickSelector" type="HBoxContainer" parent="UI"]
-position = Vector2(50, 200)
+[node name="BrickSelectorPanel" type="Panel" parent="UI"]
+position = Vector2(900, 50)
+size = Vector2(300, 600)
+
+[node name="BrickSelector" type="ScrollContainer" parent="BrickSelectorPanel"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 5
+offset_top = 5
+offset_right = -5
+offset_bottom = -5
 script = ExtResource("Brick_script")
+
+[node name="GridContainer" type="GridContainer" parent="BrickSelector"]
+columns = 3
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 5
+offset_top = 5
+offset_right = -5
+offset_bottom = -5

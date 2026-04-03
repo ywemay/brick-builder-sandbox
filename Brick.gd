@@ -2,8 +2,12 @@ extends RigidBody2D
 
 var rotation_angle = 0  # Current rotation in degrees
 var rotation_increment = 90  # Rotate by 90 degrees each time
+var original_position = Vector2.ZERO
 
 func _ready():
+	# Store original position
+	original_position = position
+	
 	# Setup physics
 	gravity_scale = 1.0
 	linear_damp = 0.1
@@ -47,10 +51,28 @@ func set_rotation_angle(angle: float):
 	$CollisionShape2D.rotation_degrees = rotation_angle
 
 # Optional: Add a small visual effect when brick is placed or rotated
-func highlight():
-	var tween = create_tween()
-	tween.tween_property($Sprite2D, "modulate", Color(1.5, 1.5, 1.5, 1), 0.1)
-	tween.tween_property($Sprite2D, "modulate", Color(1, 1, 1, 1), 0.2)
+func highlight(enable: bool = true):
+	if enable:
+		var tween = create_tween()
+		tween.tween_property($Sprite2D, "modulate", Color(1.5, 1.5, 1.0, 1), 0.1)  # Yellow tint
+		tween.tween_property($Sprite2D, "modulate", Color(1, 1, 1, 1), 0.2)
+	else:
+		$Sprite2D.modulate = Color(1, 1, 1, 1)
 
 func get_rotation_angle():
 	return rotation_angle
+
+func contains_point(point: Vector2) -> bool:
+	# Check if point is within brick bounds
+	if not $Sprite2D.texture:
+		return false
+	
+	var texture_size = $Sprite2D.texture.get_size()
+	var brick_rect = Rect2(position - texture_size / 2, texture_size)
+	return brick_rect.has_point(point)
+
+func get_position() -> Vector2:
+	return position
+
+func set_position(new_position: Vector2):
+	position = new_position
