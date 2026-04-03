@@ -26,7 +26,7 @@ func _ready():
 	
 	# Auto-remove after explosion
 	var timer = get_tree().create_timer(lifetime + 0.1)
-	timer.timeout.connect(queue_free)
+	timer.timeout.connect(Callable(self.queue_free))
 
 func create_color_ramp() -> Gradient:
 	var gradient = Gradient.new()

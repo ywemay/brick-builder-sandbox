@@ -176,8 +176,11 @@ func cancel_moving_brick():
 		return
 	
 	# Return to original position
-	if hasattr(selected_brick, "original_position"):
-		selected_brick.position = selected_brick.original_position
+	# We set original_position in start_moving_brick, so it should exist
+	# Use a safe approach in case it doesn't
+	var original_pos = selected_brick.get("original_position")
+	if original_pos:
+		selected_brick.position = original_pos
 	
 	# Remove highlight
 	if selected_brick.has_method("highlight"):
